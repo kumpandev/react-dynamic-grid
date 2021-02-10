@@ -1,16 +1,17 @@
-import React, { useState, FormEvent, useMemo } from "react";
+import React, { useState, FormEvent, useMemo, KeyboardEvent } from "react";
 import styled from "styled-components";
+import { v1 as uuidV1 } from "uuid";
 
 import { Input } from "./inputs/Input";
-import { Loupe } from "../icons/Loupe";
 import { CloseIcon } from "../icons/CloseIcon";
+import { Tag } from "../reducers/tags/types";
 
 interface Props {
-  searchArr: string[];
-  onSubmit(variant: string): void;
+  searchArr: Tag[];
+  onSubmit(tag: Tag): void;
 }
 
-export const Search = ({ searchArr, onSubmit }: Props) => {
+export const TagsSearch = ({ searchArr, onSubmit }: Props) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [isInputFocused, setInputFocused] = useState<boolean>(false);
 
@@ -30,9 +31,15 @@ export const Search = ({ searchArr, onSubmit }: Props) => {
     setSearchValue("");
   };
 
-  const handleSubmit = (value: string) => {
+  const handleSubmit = (tag: Tag) => {
     setSearchValue("");
-    onSubmit(value);
+    onSubmit(tag);
+  };
+
+  const onKeyPress = (e: KeyboardEvent) => {
+    if (e.code === "Enter" && searchValue.trim()) {
+      handleSubmit({ id: uuidV1(), name: searchValue });
+    }
   };
 
   const sortedArr = useMemo(() => {
@@ -40,22 +47,19 @@ export const Search = ({ searchArr, onSubmit }: Props) => {
       return [];
     }
 
-    return searchArr.filter((variant: string) => variant.includes(searchValue));
+    return searchArr.filter((tag: Tag) => tag.name.includes(searchValue));
   }, [searchArr, searchValue]);
 
   return (
     <Root>
       <InputContainer isInputFocused={isInputFocused}>
-        <Loupe
-          onClick={() => handleSubmit(searchValue)}
-          color={isInputFocused ? "#6d6d6d" : ""}
-        />
         <Input
           value={searchValue}
           type="text"
           onChange={handleChange}
           onBlur={handleBlur}
           onFocus={handleFocus}
+          onKeyPress={onKeyPress}
         />
         <CloseIcon
           onClick={handleReset}
@@ -64,9 +68,9 @@ export const Search = ({ searchArr, onSubmit }: Props) => {
       </InputContainer>
       {searchValue && !!sortedArr.length && (
         <SearchResultsContainer>
-          {sortedArr.map((seacrhResult: string, idx: number) => (
-            <SearchResult key={idx} onClick={() => handleSubmit(seacrhResult)}>
-              {seacrhResult}
+          {sortedArr.map((tag: Tag, idx: number) => (
+            <SearchResult key={idx} onClick={() => handleSubmit(tag)}>
+              {tag.name}
             </SearchResult>
           ))}
         </SearchResultsContainer>
@@ -93,7 +97,7 @@ const InputContainer = styled.div<InputContainerProps>`
   border-radius: 24px;
   background-color: ${({ isInputFocused }) =>
     isInputFocused ? "#fff" : "#eee"};
-  padding 4px 8px;
+  padding: 4px 8px;
   border: 1px solid #d1d1d1;
 `;
 
@@ -121,7 +125,7 @@ const SearchResult = styled.div`
   justify-content: flex-start;
   font-size: 14px;
   padding: 8px 12px;
-  &: hover {
+  &:hover {
     background: #eee;
   }
 `;

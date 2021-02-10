@@ -51,6 +51,7 @@ export const SelectImage = () => {
       url,
       likes: 0,
       tags: [],
+      likedByUser: false,
     };
 
     dispatch(AddImage.success(image));
@@ -102,7 +103,7 @@ const Submit = styled.div<SubmitButton>`
   min-width: fit-content;
   padding: 6px 14px;
   cursor: pointer;
-  &: hover {
+  &:hover {
     color: #353535;
     background-color: #ffffff;
   }

@@ -1,4 +1,4 @@
-import { FormEvent, Ref } from "react";
+import { FormEvent, KeyboardEvent, Ref } from "react";
 import styled from "styled-components";
 
 type Props = {
@@ -7,12 +7,22 @@ type Props = {
   onChange?: (event: FormEvent<HTMLInputElement>) => any;
   onBlur?: (event: FormEvent<HTMLInputElement>) => any;
   onFocus?: (event: FormEvent<HTMLInputElement>) => any;
+  onKeyPress?: (event: KeyboardEvent<any>) => any;
   type?: string;
   defaultValue?: string;
 };
 
 export const Input = (props: Props) => {
-  const { inputRef, value, onChange, onBlur, onFocus, type, defaultValue } = props;
+  const {
+    inputRef,
+    value,
+    onChange,
+    onBlur,
+    onFocus,
+    type,
+    defaultValue,
+    onKeyPress,
+  } = props;
 
   return (
     <InputContainer>
@@ -24,6 +34,7 @@ export const Input = (props: Props) => {
         onFocus={onFocus}
         type={type || "text"}
         defaultValue={defaultValue}
+        onKeyPress={onKeyPress}
       />
     </InputContainer>
   );
@@ -37,7 +48,7 @@ const InputContainer = styled.div`
   height: 32px;
   border-radius: 24px;
   background-color: #fff;
-  padding 4px 8px;
+  padding: 4px 8px;
   border: 1px solid #d1d1d1;
 `;
 

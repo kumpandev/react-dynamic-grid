@@ -10,6 +10,8 @@ export const SetImageTag = createActions("SetImageTag");
 
 export const RemoveImageTag = createActions("RemoveImageTag");
 
+export const ToggleImageLike = createActions("ToggleImageLike");
+
 export const AddImageLike = createActions("AddImageLike");
 
 export const RemoveImageLike = createActions("RemoveImageLike");

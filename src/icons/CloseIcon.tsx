@@ -5,6 +5,7 @@ interface Props {
 
 export const CloseIcon = ({ onClick, color }: Props) => (
   <svg
+    cursor="pointer"
     onClick={onClick}
     width="20"
     height="20"
